@@ -1,17 +1,19 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useRef } from "react";
 import { PDFDocument } from "pdf-lib";
 import { Upload, FileText, Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 export default function MergePDFPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [isMerging, setIsMerging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onDrop = useCallback((accepted: File[]) => {
-    setFiles(prev => [...prev, ...accepted.filter(f => f.type === "application/pdf")]);
-  }, []);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = Array.from(e.target.files || []).filter(f => f.type === "application/pdf");
+    setFiles(prev => [...prev, ...newFiles]);
+  };
 
   const removeFile = (i: number) => setFiles(prev => prev.filter((_, idx) => idx !== i));
 
@@ -40,12 +42,22 @@ export default function MergePDFPage() {
         <h1 className="text-3xl font-bold text-center mb-4">Merge PDF Files</h1>
         <p className="text-gray-600 text-center mb-8">Combine multiple PDFs into one document</p>
         
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center mb-8 cursor-pointer hover:border-purple-500" onClick={() => document.createElement("input").click()}>
+        <div 
+          className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center mb-8 cursor-pointer hover:border-purple-500 transition-colors"
+          onClick={() => inputRef.current?.click()}
+        >
           <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
           <p className="font-medium mb-2">Drag & drop PDF files here</p>
           <p className="text-gray-500 text-sm">or click to select</p>
-          <input type="file" accept=".pdf" multiple className="hidden" onChange={(e) => { const f = Array.from(e.target.files || []); setFiles(prev => [...prev, ...f.filter(f => f.type === "application/pdf")]); }} />
         </div>
+        <input 
+          ref={inputRef} 
+          type="file" 
+          accept=".pdf" 
+          multiple 
+          className="hidden" 
+          onChange={handleFileChange} 
+        />
 
         {files.length > 0 && (
           <div className="mb-8">
