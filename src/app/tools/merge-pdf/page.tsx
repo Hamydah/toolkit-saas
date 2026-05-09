@@ -25,7 +25,7 @@ export default function MergePDFPage() {
         const pages = await merged.copyPages(pdf, pdf.getPageIndices());
         pages.forEach(p => merged.addPage(p));
       }
-      const blob = new Blob([await merged.save()], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(await merged.save())], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url; a.download = "merged.pdf"; a.click();
@@ -61,7 +61,7 @@ export default function MergePDFPage() {
                     <p className="font-medium truncate">{f.name}</p>
                     <p className="text-sm text-gray-500">{(f.size / 1024).toFixed(1)} KB</p>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => removeFile(i)}><X className="h-4 w-4" /></Button>
+                  <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => removeFile(i)}><X className="h-4 w-4" /></Button>
                 </Card>
               ))}
             </div>

@@ -10,8 +10,8 @@ const replacements: Record<string, string[]> = {
   Therefore: ["So", "Which means", "So basically"],
   Moreover: ["Also", "Plus", "On top of that"],
   Additionally: ["Also", "Plus", "And"],
-  In conclusion: ["So yeah", "To wrap up", "Bottom line"],
-  It is important: ["It's worth noting", "Keep in mind"],
+  "In conclusion": ["So yeah", "To wrap up", "Bottom line"],
+  "It is important": ["It's worth noting", "Keep in mind"],
 };
 
 export default function AIHumanizerPage() {
